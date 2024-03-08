@@ -1,0 +1,95 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+void createFile() {
+    string name, course, email, contact;
+    cout << "Enter name: ";
+    getline(cin, name);
+    cout << "Enter course: ";
+    getline(cin, course);
+    cout << "Enter email: ";
+    getline(cin, email);
+    cout << "Enter contact number: ";
+    getline(cin, contact);
+
+    string fileContent = "Name: " + name + "\n";
+    fileContent += "Course: " + course + "\n";
+    fileContent += "Email: " + email + "\n";
+    fileContent += "Contact: " + contact + "\n";
+
+    // Write to file
+    FILE* outFile = fopen("mytext.txt", "w");
+    if (outFile != nullptr) {
+        fputs(fileContent.c_str(), outFile);
+        fclose(outFile);
+        cout << "File created successfully with personal information." << endl;
+    } else {
+        cout << "Error: Unable to create file." << endl;
+    }
+}
+
+void readFile() {
+    string line;
+    FILE* inFile = fopen("mytext.txt", "r");
+    if (inFile != nullptr) {
+        cout << "Contents of the file:" << endl;
+        char buffer[256];
+        while (fgets(buffer, sizeof(buffer), inFile) != nullptr) {
+            cout << buffer;
+        }
+        fclose(inFile);
+    } else {
+        cout << "Error: Unable to open file for reading." << endl;
+    }
+}
+
+void appendFile() {
+    string content;
+    cout << "Enter text to append: ";
+    getline(cin, content);
+
+    // Append to file
+    FILE* outFile = fopen("mytext.txt", "a");
+    if (outFile != nullptr) {
+        fputs(content.c_str(), outFile);
+        fclose(outFile);
+        cout << "Text appended successfully." << endl;
+    } else {
+        cout << "Error: Unable to open file for appending." << endl;
+    }
+}
+
+int main() {
+    int choice;
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Create\n";
+        cout << "2. Read\n";
+        cout << "3. Append\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore(); // clear the input buffer
+
+        switch (choice) {
+            case 1:
+                createFile();
+                break;
+            case 2:
+                readFile();
+                break;
+            case 3:
+                appendFile();
+                break;
+            case 4:
+                cout << "Exiting program..." << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please enter a number between 1 and 4." << endl;
+        }
+    } while (choice != 4);
+
+    return 0;
+}
